@@ -1,4 +1,4 @@
-use crate::rng::lcrng::Lcrng;
+use crate::rng::lcrng::Pokerng;
 use crate::rng::{Rng, StateIterator};
 use crate::{Gender, IvFilter, Ivs, Nature, Species, gen3_shiny};
 use serde::{Deserialize, Serialize};
@@ -76,7 +76,7 @@ pub struct Static3Options {
 
 #[wasm_bindgen]
 pub fn gen3_static_states(opts: &Static3Options) -> Vec<Static3Result> {
-    StateIterator::new(Lcrng::new_prng(opts.seed))
+    StateIterator::new(Pokerng::new(opts.seed))
         .skip(opts.offset)
         .enumerate()
         .skip(opts.initial_advances)
@@ -93,7 +93,7 @@ pub fn gen3_static_states(opts: &Static3Options) -> Vec<Static3Result> {
 }
 
 fn generate_gen3_static_state(
-    mut rng: Lcrng,
+    mut rng: Pokerng,
     opts: &Static3Options,
     advance: usize,
 ) -> Static3Result {
@@ -129,6 +129,7 @@ fn generate_gen3_static_state(
 #[cfg(test)]
 mod test {
     use super::*;
+    use crate::assert_list_eq;
 
     const ZERO_IVS: Ivs = Ivs {
         hp: 0,
@@ -335,14 +336,7 @@ mod test {
             },
         ];
 
-        assert_eq!(results.len(), expected.len());
-        results
-            .into_iter()
-            .zip(expected.into_iter())
-            .enumerate()
-            .for_each(|(index, (result, expected))| {
-                assert_eq!(result, expected, "index: {}", index);
-            });
+        assert_list_eq!(results, expected);
     }
 
     #[test]
@@ -533,14 +527,7 @@ mod test {
             },
         ];
 
-        assert_eq!(results.len(), expected.len());
-        results
-            .into_iter()
-            .zip(expected.into_iter())
-            .enumerate()
-            .for_each(|(index, (result, expected))| {
-                assert_eq!(result, expected, "index: {}", index);
-            });
+        assert_list_eq!(results, expected);
     }
 
     #[test]
@@ -731,14 +718,7 @@ mod test {
             },
         ];
 
-        assert_eq!(results.len(), expected.len());
-        results
-            .into_iter()
-            .zip(expected.into_iter())
-            .enumerate()
-            .for_each(|(index, (result, expected))| {
-                assert_eq!(result, expected, "index: {}", index);
-            });
+        assert_list_eq!(results, expected);
     }
 
     #[test]
@@ -849,13 +829,6 @@ mod test {
             },
         ];
 
-        assert_eq!(results.len(), expected.len());
-        results
-            .into_iter()
-            .zip(expected.into_iter())
-            .enumerate()
-            .for_each(|(index, (result, expected))| {
-                assert_eq!(result, expected, "index: {}", index);
-            });
+        assert_list_eq!(results, expected);
     }
 }

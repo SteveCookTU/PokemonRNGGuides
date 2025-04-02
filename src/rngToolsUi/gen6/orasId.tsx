@@ -6,7 +6,6 @@ import {
   RngToolSubmit,
   Field,
   FormikIdFilter,
-  Typography,
   FormikSwitch,
 } from "~/components";
 import { rngTools, Gen6Id } from "~/rngTools";
@@ -28,6 +27,7 @@ const columns: ResultColumn<Gen6Id>[] = [
     title: "Seed",
     dataIndex: "seed",
     key: "seed",
+    monospace: true,
     render: (seed) => seed.toString(16).toUpperCase().padStart(8, "0"),
   },
   {
@@ -54,24 +54,18 @@ const columns: ResultColumn<Gen6Id>[] = [
     title: "Date/Time",
     dataIndex: "datetime",
     key: "datetime",
-    render: (date) => (
-      <Typography.Text whiteSpace="nowrap">
-        {formatRngDateTime(date, { seconds: true })}
-      </Typography.Text>
-    ),
+    render: (date) => formatRngDateTime(date, { seconds: true }),
   },
   {
     title: "State",
     dataIndex: "tinymt_state",
     key: "tinymt_state",
-    render: (state: number[]) => (
-      <Typography.Text whiteSpace="nowrap">
-        {state
-          .map((num) => num.toString(16).padStart(8, "0").toUpperCase())
-          .reverse()
-          .join(", ")}
-      </Typography.Text>
-    ),
+    monospace: true,
+    render: (state: number[]) =>
+      state
+        .map((num) => num.toString(16).padStart(8, "0").toUpperCase())
+        .reverse()
+        .join(", "),
   },
 ];
 
